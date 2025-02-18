@@ -6,7 +6,8 @@ import { FakeButton, Icon, PublicButton } from '../buttons/styles';
 import { useNavigation } from '@react-navigation/native';
 import { PublicNavigationProp } from '../../routes/publicStack';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { checkEmail } from '../../utils/formValidation';
+import { CreateAccountError, MainModal } from '../contents/modal';
+import { checkCNPJ, checkEmail, checkName, checkOrg, checkPassword } from '../../utils/formValidation';
 
 export default function SignUpContent(){
     const navigation = useNavigation<PublicNavigationProp>();
@@ -18,6 +19,7 @@ export default function SignUpContent(){
     const [name, setName] = useState("")
     const [hidePassword, setHidePassword] = useState(true);
     const [hideConfirmPassword, setHideConfirmPassword] = useState(true);
+    const [isVisible, setIsVisible] = useState(false);
 
     function filledInputs(){
         if(email && password && confirmPassword && org && cnpj)
@@ -34,7 +36,11 @@ export default function SignUpContent(){
       ];
 
     function handleCreateAccount(){
-        
+        if(!checkCNPJ(cnpj) || !checkEmail(email) || !checkName(name) || !checkOrg(org) || !checkPassword(password)){
+            setIsVisible((prev: boolean)=> !prev)
+        }
+        else 
+            alert("FUNCIONOU")
     }
 
     return(
@@ -122,6 +128,7 @@ export default function SignUpContent(){
                 <PublicButton 
                     xSize={90} 
                     ySize={50}
+                    onPress={handleCreateAccount}
                 >
                     <ButtonText>Criar Conta</ButtonText>
                 </PublicButton>
@@ -143,6 +150,19 @@ export default function SignUpContent(){
                 </FakeButton>
             </BasicRow>
             </Form>
+            <MainModal
+                isVisible = {isVisible}
+                closeModal={() => setIsVisible((prev: boolean) => !prev)}
+                children={
+                    <CreateAccountError
+                        email = {checkEmail(email)}
+                        password = {checkPassword(password)}
+                        name = {checkName(name)}
+                        org = {checkOrg(org)}
+                        cnpj = {checkCNPJ(cnpj)}
+                    />
+                }
+            />
         </PublicContent>
     );
 }

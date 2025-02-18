@@ -4,7 +4,10 @@ import styled from "styled-components/native";
 interface ContentProps extends ViewProps{
     ySize?: number;
     $isValid?: boolean;
+    color: string;
 }
+
+const screenHeight = Dimensions.get("window").height;
 
 export const LoginBackground = styled.View`
     flex: 1;
@@ -69,4 +72,38 @@ export const Title = styled.View`
     height: 22%;
     align-items: center;
     justify-content: center;
+`;
+
+export const ModalContainer = styled.View`
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const ModalHeader = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  width: 100%;
+`;
+
+export const ModalContent = styled.View<ContentProps>`
+  width: 100%;
+  max-height: ${screenHeight * 0.315}px;
+  min-height: ${screenHeight * 0.19}px;
+  background-color: ${(props: ContentProps) => props.color || " #e3eaf6"};
+  border-width: 1px;
+  border-color: #85a3d5;
+  justify-content: center;
+  border-radius: 16px;
+  padding: 12px;
+  gap: 8px;
+`;
+
+export const ModalRowText = styled.View`
+    flex-direction: row;
+    gap: 2px;
+    align-items: center;
+    justify-content: left;
+    /* border: 1px; */
 `;

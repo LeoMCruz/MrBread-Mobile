@@ -6,7 +6,7 @@ export function checkEmail(text: string){
 }
 
 export function checkPassword(text: string){
-
+    return text.length >= 8;
 }
 
 export function checkName(text: string){
@@ -15,9 +15,9 @@ export function checkName(text: string){
 }
 
 export function checkOrg(text: string){
-
+    return text.length >= 2;
 }
 
 export function checkCNPJ(text: string){
-
+    return text.length == 14;
 }
