@@ -26,3 +26,9 @@ export const Icon = styled.TouchableOpacity`
   justify-content: center;
   align-items: center;
 `;
+
+export const CloseModal = styled.TouchableOpacity`
+  position: absolute;
+  bottom: 15px;
+  right: 20px;
+`;

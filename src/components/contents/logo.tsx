@@ -1,5 +1,5 @@
 import React from "react";
-import { Logo } from "./styles";
+import { Logo } from "../views/styles";
 import MrBread from "../../assets/mrBread.svg";
 
 export default function MrLogo(){

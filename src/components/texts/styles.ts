@@ -29,11 +29,22 @@ export const CreateAccount = styled.Text`
 export const ValidText = styled.Text`
     font-size: 14px;
     color: #059b37;
-    font-weight: bold;
+    /* font-weight: bold; */
 `;
 
 export const InvalidText = styled.Text`
     font-size: 14px;
     color: #aa1f0c;
+    /* font-weight: bold; */
+`;
+
+export const ModalText = styled.Text`
+    color: #4657a1;
+    font-size: 15px;
     font-weight: bold;
+`;
+
+export const SuccessText = styled.Text`
+    color: #4657a1;
+    font-size: 16px;
 `;

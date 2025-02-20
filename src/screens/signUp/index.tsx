@@ -1,8 +1,8 @@
 import { View, Text, Platform } from "react-native";
 import { AvoidView, SafeAreaView, ScrollView } from "../../components/global/styles";
-import Background from "../../components/views/publicbackground";
+import Background from "../../components/contents/publicbackground";
 import React from "react";
-import SignUpContent from "../../components/views/signupContent";
+import SignUpContent from "../../components/contents/signupContent";
 import { CreateAccount } from "../../components/texts/styles";
 import { Title } from "../../components/views/styles";
 

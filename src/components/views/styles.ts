@@ -90,14 +90,14 @@ export const ModalHeader = styled.View`
 export const ModalContent = styled.View<ContentProps>`
   width: 100%;
   max-height: ${screenHeight * 0.315}px;
-  min-height: ${screenHeight * 0.19}px;
-  background-color: ${(props: ContentProps) => props.color || " #e3eaf6"};
+  min-height: ${screenHeight * 0.15}px;
+  background-color: ${(props: ContentProps) => props.color || " #f3f5fb"};
   border-width: 1px;
   border-color: #85a3d5;
   justify-content: center;
   border-radius: 16px;
-  padding: 12px;
-  gap: 8px;
+  padding: 15px;
+  gap: 10px;
 `;
 
 export const ModalRowText = styled.View`
@@ -106,4 +106,9 @@ export const ModalRowText = styled.View`
     align-items: center;
     justify-content: left;
     /* border: 1px; */
+`;
+
+export const FakeCenterView = styled.View`
+    justify-content: center;
+    align-items: center;
 `;

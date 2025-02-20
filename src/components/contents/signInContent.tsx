@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
-import { BasicRow, Form, InputContainer, PublicContent } from './styles';
+import { BasicRow, Form, InputContainer, PublicContent } from '../views/styles';
 import { PublicInput } from '../inputs/styles';
 import { ButtonText, ClickText, PublicText, StandardText } from '../texts/styles';
 import { FakeButton, Icon, PublicButton } from '../buttons/styles';
 import { useNavigation } from '@react-navigation/native';
 import { PublicNavigationProp } from '../../routes/publicStack';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { ActivityIndicator } from 'react-native';
 
 export default function SignInContent(){
     const navigation = useNavigation<PublicNavigationProp>();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [hidePassword, setHidePassword] = useState(true);
+    const [loadingg, setLoading] = useState(false);
 
     return(
         <PublicContent ySize={60}>
@@ -48,7 +50,11 @@ export default function SignInContent(){
                 xSize={90} 
                 ySize={50}
             >
-                <ButtonText>Entrar</ButtonText>
+                {loadingg ? (
+                    <ActivityIndicator size="large" color="#ecf0f1" />
+                ) : (
+                    <ButtonText>Entrar</ButtonText>
+                )}
             </PublicButton>
             <BasicRow>
                 <StandardText>Ainda não possui uma conta? </StandardText>

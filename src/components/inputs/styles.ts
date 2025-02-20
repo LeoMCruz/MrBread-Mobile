@@ -10,6 +10,9 @@ interface InputProps extends TextInputProps{
 interface MaskProps extends MaskInputProps{
     xSize: number;
     ySize: number;
+    onChangeText: (text: string) => void;
+    value: string;
+    secureTextEntry?: boolean;
 }
 
 export const PublicInput = styled(MaskInput)<MaskProps>`

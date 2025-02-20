@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
-import { BasicRow, Form, InputContainer, PublicContent } from './styles';
+import React, { useContext, useState } from 'react';
+import { BasicRow, Form, InputContainer, PublicContent } from '../views/styles';
 import { PublicInput } from '../inputs/styles';
-import { ButtonText, ClickText, PublicText, StandardText } from '../texts/styles';
+import { ButtonText, ClickText, InvalidText, PublicText, StandardText } from '../texts/styles';
 import { FakeButton, Icon, PublicButton } from '../buttons/styles';
 import { useNavigation } from '@react-navigation/native';
 import { PublicNavigationProp } from '../../routes/publicStack';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { CreateAccountError, MainModal } from '../contents/modal';
+import {InvalidInputs, MainModal, SuccessCreateAccount } from './modal';
 import { checkCNPJ, checkEmail, checkName, checkOrg, checkPassword } from '../../utils/formValidation';
+import { AuthContext } from '../../context/auth';
+import { ActivityIndicator } from 'react-native';
 
 export default function SignUpContent(){
     const navigation = useNavigation<PublicNavigationProp>();
@@ -20,11 +22,21 @@ export default function SignUpContent(){
     const [hidePassword, setHidePassword] = useState(true);
     const [hideConfirmPassword, setHideConfirmPassword] = useState(true);
     const [isVisible, setIsVisible] = useState(false);
+    const [accountCreated, setAccountCreated] = useState(false);
+    const [apiResponse, setApiResponse] = useState("");
+    const [passwordMatch, setPasswordMatch] = useState(true);
+    const {CreateAccount} = useContext(AuthContext);
+    const [loading, setLoading] = useState(false);
+
 
     function filledInputs(){
-        if(email && password && confirmPassword && org && cnpj)
+        if(email && password && confirmPassword && org && cnpj && passwordMatch)
             return true;
         return false;
+    }
+
+    function comparePasswords(text: string) {
+        setPasswordMatch(password === text);
     }
 
     const cnpjMask = [
@@ -35,12 +47,30 @@ export default function SignUpContent(){
         /\d/, /\d/
       ];
 
-    function handleCreateAccount(){
+    async function handleCreateAccount(){
+        setLoading(true);
         if(!checkCNPJ(cnpj) || !checkEmail(email) || !checkName(name) || !checkOrg(org) || !checkPassword(password)){
             setIsVisible((prev: boolean)=> !prev)
+            setLoading(false);
         }
-        else 
-            alert("FUNCIONOU")
+        else {
+            setLoading(true);
+            try {
+                const response = await CreateAccount(org, cnpj, name, email, password);
+                if(response.status === 200){
+                    setApiResponse("Usuário criada com sucesso!");
+                    setAccountCreated((prev: boolean)=> !prev);
+                    setLoading(false);
+                }
+            } catch (error: Error | any) {
+                const {title} = error.response.data;
+                setApiResponse(title);
+                setAccountCreated((prev: boolean)=> !prev); 
+                setLoading(false);                
+            }
+            
+        }
+           
     }
 
     return(
@@ -114,7 +144,7 @@ export default function SignUpContent(){
                         placeholder="**********" 
                         value={confirmPassword}
                         secureTextEntry={hideConfirmPassword}
-                        onChangeText={(text: string) => setConfirmPassword(text)}
+                        onChangeText={(text: string) => {setConfirmPassword(text); comparePasswords(text)}}
                     />
                     <Icon onPress={() => setHideConfirmPassword(!hideConfirmPassword)}>
                         {hideConfirmPassword ? (
@@ -124,13 +154,19 @@ export default function SignUpContent(){
                         )}
                     </Icon>
                 </InputContainer>
+                {!passwordMatch ?
+                    (<InvalidText>As senhas não coincidem</InvalidText>) : (<></>)}
             {filledInputs()? (
                 <PublicButton 
                     xSize={90} 
                     ySize={50}
                     onPress={handleCreateAccount}
                 >
-                    <ButtonText>Criar Conta</ButtonText>
+                    {loading ? (
+                        <ActivityIndicator size="small" color="#ecf0f1" />
+                    ) : (
+                        <ButtonText>Criar Conta</ButtonText>
+                    )}
                 </PublicButton>
 
             ): (
@@ -154,12 +190,22 @@ export default function SignUpContent(){
                 isVisible = {isVisible}
                 closeModal={() => setIsVisible((prev: boolean) => !prev)}
                 children={
-                    <CreateAccountError
+                    <InvalidInputs
                         email = {checkEmail(email)}
                         password = {checkPassword(password)}
                         name = {checkName(name)}
                         org = {checkOrg(org)}
                         cnpj = {checkCNPJ(cnpj)}
+                    />
+                }
+            />
+             <MainModal
+                isVisible = {accountCreated}
+                closeModal={() => {setAccountCreated((prev: boolean) => !prev);}}
+                children={
+                    <SuccessCreateAccount
+                        message = {apiResponse}
+                        closeModal={() => {setAccountCreated((prev: boolean) => !prev); navigation.navigate("SignIn")}}
                     />
                 }
             />
