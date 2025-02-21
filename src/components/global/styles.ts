@@ -25,6 +25,6 @@ export const Container = styled.View`
     flex: 1;
     width: 100%;
     height: ${screenHeight}px;
-    
-    background-color: black;
+    align-items: center;
+    justify-content: center;    
 `;

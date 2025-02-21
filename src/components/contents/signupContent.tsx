@@ -62,12 +62,32 @@ export default function SignUpContent(){
                     setAccountCreated((prev: boolean)=> !prev);
                     setLoading(false);
                 }
-            } catch (error: Error | any) {
-                const {title} = error.response.data;
-                setApiResponse(title);
-                setAccountCreated((prev: boolean)=> !prev); 
-                setLoading(false);                
+            } catch (error: any) {
+                if (error.code === 'ECONNABORTED') {
+                    setApiResponse("Tempo de conexão excedido. Por favor, tente novamente.");
+                } else if (!error.response) {
+                    setApiResponse("Erro de conexão. Verifique sua internet e tente novamente.");
+                } else {
+                    const title = error.response?.data?.title || "Erro ao criar usuário";
+                    setApiResponse(title);
+                }
+                setAccountCreated(prev => !prev);
+            } finally {
+                setLoading(false);
             }
+            
+            // catch (error: Error | any) {
+            //     if(error.response){
+            //         const {title} = error.response.data;
+            //         setApiResponse(title);
+            //         setAccountCreated((prev: boolean)=> !prev); 
+            //         setLoading(false);                
+            //     }else{
+            //         setApiResponse("Erro ao criar usuário");
+            //         setAccountCreated((prev: boolean)=> !prev);
+            //         setLoading(false);
+            //     }
+            // }
             
         }
            

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { BasicRow, Form, InputContainer, PublicContent } from '../views/styles';
 import { PublicInput } from '../inputs/styles';
 import { ButtonText, ClickText, PublicText, StandardText } from '../texts/styles';
@@ -7,13 +7,33 @@ import { useNavigation } from '@react-navigation/native';
 import { PublicNavigationProp } from '../../routes/publicStack';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { ActivityIndicator } from 'react-native';
+import { AuthContext } from '../../context/auth';
+import { MainModal, SuccessCreateAccount } from './modal';
 
 export default function SignInContent(){
     const navigation = useNavigation<PublicNavigationProp>();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [hidePassword, setHidePassword] = useState(true);
-    const [loadingg, setLoading] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const {Login} = useContext(AuthContext);
+    const [isVisible, setIsVisible] = useState(false);
+    const [apiResponse, setApiResponse] = useState("");
+
+    async function handleSignIn(){
+        setLoading(true);
+        try {
+            const response = await Login(email, password);
+            if(response.status !== 200){
+                setApiResponse(response.data.errorMessage);
+                setIsVisible(true);
+                setLoading(false);
+            }
+            setLoading(false);
+        } catch (error: any) {
+            return error;
+        }
+    }
 
     return(
         <PublicContent ySize={60}>
@@ -46,16 +66,29 @@ export default function SignInContent(){
                         )}
                     </Icon>
                 </InputContainer>
-            <PublicButton 
-                xSize={90} 
-                ySize={50}
-            >
-                {loadingg ? (
-                    <ActivityIndicator size="large" color="#ecf0f1" />
-                ) : (
-                    <ButtonText>Entrar</ButtonText>
+                {password.length > 7 ?(
+                    <PublicButton 
+                        xSize={90} 
+                        ySize={50}
+                        onPress={() => handleSignIn()}
+                    >
+                        {loading ? (
+                            <ActivityIndicator size="large" color="#ecf0f1" />
+                        ) : (
+                            <ButtonText>Entrar</ButtonText>
+                        )}
+                    </PublicButton>
+
+                ): (
+                    <PublicButton
+                        xSize={90}
+                        ySize={50}
+                        color={"#85a3d5"}
+                        disable={true}
+                    >
+                        <ButtonText>Entrar</ButtonText>
+                    </PublicButton>
                 )}
-            </PublicButton>
             <BasicRow>
                 <StandardText>Ainda não possui uma conta? </StandardText>
                 <FakeButton onPress={() => navigation.navigate("SignUp")} >
@@ -63,6 +96,16 @@ export default function SignInContent(){
                 </FakeButton>
             </BasicRow>
             </Form>
+            <MainModal
+                isVisible = {isVisible}
+                closeModal={() => {setIsVisible((prev: boolean) => !prev);}}
+                children={
+                    <SuccessCreateAccount
+                    message = {apiResponse}
+                    closeModal={() => {setIsVisible((prev: boolean) => !prev)}}
+                    />
+                }
+            />
         </PublicContent>
     );
 }
