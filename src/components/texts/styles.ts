@@ -48,3 +48,12 @@ export const SuccessText = styled.Text`
     color: #4657a1;
     font-size: 16px;
 `;
+
+export const CardText = styled.Text`
+    font-size: 12px;
+`;
+
+export const DataText = styled.Text`
+    color: #f3f5fb;
+    font-size: 14px;
+`;

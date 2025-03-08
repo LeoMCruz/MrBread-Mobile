@@ -25,7 +25,7 @@ export default function SignInContent(){
         try {
             const response = await Login(email, password);
             if(response.status !== 200){
-                setApiResponse(response.data.errorMessage);
+                setApiResponse(response.data.title);
                 setIsVisible(true);
                 setLoading(false);
             }

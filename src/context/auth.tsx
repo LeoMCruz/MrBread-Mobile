@@ -24,7 +24,7 @@ interface AuthContextData {
 export const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
 function AuthProvider({ children }: {children: React.ReactNode}) {
-    const [isAuthenticated, setIsAuthinticated] = useState(false);
+    const [isAuthenticated, setIsAuthinticated] = useState(true);
     const [user, setUser] = useState<UserData | null>(null);
 
     async function CreateAccount(org: string, cnpj: string, name: string, email: string, password: string) {

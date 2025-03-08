@@ -7,8 +7,7 @@ interface ButtonProps extends TouchableOpacityProps{
     color?: string;
 }
 
-export const FakeButton = styled.TouchableOpacity<ButtonProps>`
-`;
+export const FakeButton = styled.TouchableOpacity``;
 
 export const PublicButton = styled.TouchableOpacity<ButtonProps>`
     flex-direction: row;
@@ -31,4 +30,10 @@ export const CloseModal = styled.TouchableOpacity`
   position: absolute;
   bottom: 15px;
   right: 20px;
+`;
+
+export const TopButton = styled.TouchableOpacity`
+    position: absolute;
+    top: 60px;
+    right: 8%;
 `;

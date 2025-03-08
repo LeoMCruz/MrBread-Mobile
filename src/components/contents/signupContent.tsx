@@ -57,8 +57,9 @@ export default function SignUpContent(){
             setLoading(true);
             try {
                 const response = await CreateAccount(org, cnpj, name, email, password);
-                if(response.status === 200){
-                    setApiResponse("Usuário criada com sucesso!");
+                console.log(response);
+                if(response.status === 201){
+                    setApiResponse("Usuário criado com sucesso!");
                     setAccountCreated((prev: boolean)=> !prev);
                     setLoading(false);
                 }
@@ -74,23 +75,8 @@ export default function SignUpContent(){
                 setAccountCreated(prev => !prev);
             } finally {
                 setLoading(false);
-            }
-            
-            // catch (error: Error | any) {
-            //     if(error.response){
-            //         const {title} = error.response.data;
-            //         setApiResponse(title);
-            //         setAccountCreated((prev: boolean)=> !prev); 
-            //         setLoading(false);                
-            //     }else{
-            //         setApiResponse("Erro ao criar usuário");
-            //         setAccountCreated((prev: boolean)=> !prev);
-            //         setLoading(false);
-            //     }
-            // }
-            
-        }
-           
+            }            
+        }           
     }
 
     return(
