@@ -37,3 +37,8 @@ export const TopButton = styled.TouchableOpacity`
     top: 60px;
     right: 8%;
 `;
+
+export const CreateButton = styled.TouchableOpacity`
+  align-self: flex-end;
+  margin-right: 5%;
+`;

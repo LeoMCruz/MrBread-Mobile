@@ -19,12 +19,13 @@ interface AuthContextData {
     CreateAccount(org: string, cnpj: string, name: string, email: string, password: string): Promise<AxiosResponse<any>>;
     Login(email: string, password: string): Promise<AxiosResponse<any>>;
     user: UserData | null;
+    logout(): void;
 }
 
 export const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
 function AuthProvider({ children }: {children: React.ReactNode}) {
-    const [isAuthenticated, setIsAuthinticated] = useState(true);
+    const [isAuthenticated, setIsAuthinticated] = useState(false);
     const [user, setUser] = useState<UserData | null>(null);
 
     async function CreateAccount(org: string, cnpj: string, name: string, email: string, password: string) {
@@ -36,6 +37,26 @@ function AuthProvider({ children }: {children: React.ReactNode}) {
         password: password,
       }); 
       return response;
+    }
+
+    useEffect(() =>{
+      async function loadData(){
+        await loadUser();
+      }
+      loadData();
+    },[])
+  
+    async function loadUser(){
+      try {
+        const storedToken = await AsyncStorage.getItem("@bearerToken");
+        if(storedToken){
+          api.defaults.headers.common['Authorization'] = storedToken;
+          await getUserData();
+          // await AsyncStorage.clear();  
+        }
+      } catch (error) {
+        setIsAuthinticated(false);
+      }
     }
 
     async function Login(email: string, password: string) {
@@ -73,13 +94,21 @@ function AuthProvider({ children }: {children: React.ReactNode}) {
       }
     }
 
+    async function logout() {
+      await AsyncStorage.removeItem("@bearerToken");
+      await AsyncStorage.removeItem("@user");
+      setIsAuthinticated(false);
+      setUser(null);
+    }
+
     return (
         <AuthContext.Provider
           value={{
             isAuthenticated,
             CreateAccount,
             Login,
-            user
+            user,
+            logout
           }}>
             {children}
         </AuthContext.Provider>  

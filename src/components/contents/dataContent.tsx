@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { ImageContainer, Image, FakeView, HeaderText } from '../views/styles';
 import { FakeButton } from '../buttons/styles';
 import { DataText } from '../texts/styles';
+import { AuthContext } from '../../context/auth';
 
 export default function DataContent(){
+    const {user} = useContext(AuthContext);
+
     return(
         <FakeView>
             <ImageContainer>
@@ -12,8 +15,8 @@ export default function DataContent(){
                 </FakeButton>
             </ImageContainer>
             <HeaderText>
-                <DataText>NOME DA EMPRESA</DataText>
-                <DataText>NOME DO USUARIO</DataText>
+                <DataText>{user?.nomeOrganizacao}</DataText>
+                <DataText>{user?.nome}</DataText>
             </HeaderText>
         </FakeView>
     );

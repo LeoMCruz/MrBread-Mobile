@@ -14,11 +14,12 @@ export const AvoidView = styled.KeyboardAvoidingView`
 
 export const SafeAreaView = styled.SafeAreaView`
     flex: 1;
+    background-color: #f3f5fb;
 `;
 
 export const ScrollView = styled.ScrollView`
     flex: 1;
-    background-color: red;
+    /* background-color: #f3f5fb; */
 `;
 
 export const Container = styled.View`

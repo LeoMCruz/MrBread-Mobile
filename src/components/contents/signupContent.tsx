@@ -57,7 +57,6 @@ export default function SignUpContent(){
             setLoading(true);
             try {
                 const response = await CreateAccount(org, cnpj, name, email, password);
-                console.log(response);
                 if(response.status === 201){
                     setApiResponse("Usuário criado com sucesso!");
                     setAccountCreated((prev: boolean)=> !prev);

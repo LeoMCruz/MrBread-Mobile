@@ -6,6 +6,8 @@ interface ContentProps extends ViewProps{
     $isValid?: boolean;
     color?: string;
     elevation?: number;
+    marginTop?: number;
+    marginBot?: number;
 }
 
 const screenHeight = Dimensions.get("window").height;
@@ -131,12 +133,15 @@ export const Box = styled.View<ContentProps>`
     align-items: center;
     justify-content: center;
     gap: 10px;
-       /* Sombreamento para iOS */
-    shadow-color: #000;
-    shadow-offset: 0px 2px;
-    shadow-opacity: 0.1;
-    shadow-radius: 3px;
-    ${Platform.OS === 'android' ? 'elevation: 4' : ''};
+    ${Platform.OS === 'ios' 
+        ? `
+            shadow-color: #000;
+            shadow-offset: 0px 2px;
+            shadow-opacity: 0.1;
+            shadow-radius: 3px;
+          `
+        : 'elevation: 4'
+    };
 `;
 
 export const ImageContainer = styled.View`
@@ -169,4 +174,75 @@ export const FakeView = styled.View`
     gap: 20px;
     top: 60px;
     left: 8%;
+`;
+
+export const SearchView = styled.View<ContentProps>`
+    align-self: center;
+    margin-top: ${(props: ContentProps) => props.marginTop || 30}px;
+    margin-bottom: ${(props: ContentProps) => props.marginBot || 0}px;
+    width: 90%;
+    align-items: center;
+    gap: 10px;
+    height: 50px;
+    padding: 10px;
+    flex-direction: row;
+    background-color: #FFFFFF;
+    border-radius: 16px;
+    ${Platform.OS === 'ios' 
+        ? `
+            shadow-color: #000;
+            shadow-offset: 0px 2px;
+            shadow-opacity: 0.1;
+            shadow-radius: 3px;
+          `
+        : 'elevation: 4'
+    };
+`;
+
+export const FlatListArea = styled.View`
+    width: 90%;
+    height: 78%;
+    /* border: 1px; */
+    align-items: center;
+    justify-content: top;
+    align-self: center;
+    margin-top: 20px;
+`;
+
+export const FlatListItems = styled.View`
+  width: 100%;
+  height: ${screenHeight * 0.093}px;
+  justify-content: space-between;
+  align-self: center;
+  border-radius: 8px;
+  padding: 12px;
+  background-color: #FFFFFF;
+  flex-direction: row;
+  border-width: 1px;
+  border-color: #d1cbd7;
+  margin-bottom: 5px;
+`;
+
+export const FlatListContent = styled.View`
+    flex-direction: column;
+    width: 70%;
+`;
+
+export const CreateForm = styled.View<ContentProps>`
+    width: 90%;
+    min-height: ${(props: ContentProps) => props.ySize}%;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    align-self: center;
+    border-radius: 16px;
+    background-color: #f3f5fb;
+    padding-top: 15px;
+    padding-bottom: 15px;
+`;
+
+export const ModalMainView = styled.View`
+  flex: 1;
+  align-items: center;
+  justify-content: center;
 `;
